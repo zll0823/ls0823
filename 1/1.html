@@ -1,0 +1,151 @@
+<!doctype html>
+<html class="translated-ltr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>1</title>
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/reset.css">
+		<style>
+			html {overflow:hidden}
+			body {position: absolute; margin:0; padding:0;width:100%; height:100%; background: #fefbe8}
+			canvas {display:block}
+			<!--.pagination-outer{ text-align: center; }-->
+			.pagination-outer{ 
+			position: absolute; 
+			/* text-align: right; */
+			right: 5%;
+			top: 90%;}
+			.pagination{
+				font-family: 'Allerta Stencil', sans-serif;
+				display: inline-flex;
+				position: relative;
+			}
+			.pagination li a.page-link{
+				color: #fff;
+				background: transparent;
+				font-size: 21px;
+				line-height: 35px;
+				height: 38px;
+				width: 38px;
+				padding: 0;
+				margin: 0 8px;
+				border: none;
+				position: relative;
+				z-index: 1;
+				transition: all 0.4s ease 0s;
+			}
+			.pagination li.active a.page-link,
+			.pagination li a.page-link:hover,
+			.pagination li.active a.page-link:hover{
+				color: #fff;
+				background-color: transparent;
+			}
+			.pagination li a.page-link:before,
+			.pagination li a.page-link:after{
+				content:'';
+				background: linear-gradient(225deg,#f857a6,#ff5858);
+				height: 100%;
+				width: 100%;
+				border: 3px solid #fff;
+				box-shadow: 0 0 3px #000;
+				border-radius: 50%;
+				opacity: 1;
+				transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				z-index: -1;
+				transition: all 0.3s ease-in;
+			}
+			.pagination li a.page-link:hover:before,
+			.pagination li.active a.page-link:before{
+				border-radius: 50% 0 50% 50%;
+			}
+			.pagination li a.page-link:after{
+				background: #fff;
+				height: 5px;
+				width: 5px;
+				border: none;
+				box-shadow: 0 0 0 transparent;
+				opacity: 0;
+				transform: translateX(-50%) translateY(0) rotate(0);
+				top: auto;
+				bottom: 0;
+			}
+			.pagination li a.page-link:hover:after,
+			.pagination li.active a.page-link:after{
+				opacity: 1;
+				bottom: 85%;
+			}
+			.pagination li:first-child a.page-link:before{
+				transform: translateX(-50%) translateY(-50%) rotate(-135deg);
+			}
+			.pagination li:first-child a.page-link:hover:before{ border-radius: 50% 0 50% 50%; }
+			.pagination li:first-child a.page-link:after{
+				transform: translateX(0) translateY(-50%);
+				top: 50%;
+				bottom:auto;
+				left: auto;
+				right: 0;
+			 }
+			.pagination li:first-child a.page-link:hover:after{ right: 80%; }
+			.pagination li:last-child a.page-link:before{
+				transform: translateX(-50%) translateY(-50%) rotate(45deg);
+			}
+			.pagination li:last-child a.page-link:hover:before{ border-radius: 50% 0 50% 50%; }
+			.pagination li:last-child a.page-link:after{
+				transform: translateX(0) translateY(-50%);
+				bottom:auto;
+				top: 50%;
+				left: 0;
+			}
+			.pagination li:last-child a.page-link:hover:after{ left: 80%; }
+			@media only screen and (max-width: 480px){
+				.pagination{ display: block; }
+			 
+				.pagination li{
+					margin-bottom: 10px;
+					display: inline-block;
+				}
+			}
+		</style>
+		<script type="text/javascript" src="js/laro.fsm.js"></script>
+		<script type="text/javascript" src="js/JCanvas.0.1.js"></script>
+	</head>
+
+<body>
+	<div class="pt-page-moveToLeft">
+		<!--<div style="height:140px;"></div>-->
+
+		<nav class="pagination-outer" aria-label="Page navigation">
+			<ul class="pagination">
+				<li class="page-item">
+					<a href="#" class="page-link" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="page-item active"><a class="page-link" href="./1.html">1</a></li>
+				<li class="page-item"><a class="page-link"  href="../2/2.html">2</a></li>
+				<li class="page-item"><a class="page-link" href="../3/3.html">3</a></li>
+				<li class="page-item"><a class="page-link" href="../4/4.html">4</a></li>
+				<li class="page-item"><a class="page-link" href="../5/5.html">5</a></li>
+				<li class="page-item">
+					<a href="../2/2.html" class="page-link" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		
+		<canvas id="canvas" width="100%" height="100%"></canvas>
+
+		<img id="youtext" style="display:none" src="images/youtext.png" />
+		<img id="designIco" style="display:none" src="images/designIco.png" />
+		<img id="h5ico" style="display:none" src="images/h5ico.png" />
+		<img id="cs3" style="display:none" src="images/cs3.png" />
+		<script type="text/javascript" src="js/script.js"></script>
+	</div>
+</body>
+</html>

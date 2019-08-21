@@ -1,0 +1,365 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>毕达哥拉斯树</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+
+<style>
+html {overflow:hidden}
+			body {position: absolute; margin:0; padding:0;width:100%; height:100%; background: #fefbe8}
+			canvas {display:block}
+			<!--.pagination-outer{ text-align: center; }-->
+			.pagination-outer{ 
+			position: absolute; 
+			/* text-align: right; */
+			right: 5%;
+			top: 90%;}
+			.pagination{
+				font-family: 'Allerta Stencil', sans-serif;
+				display: inline-flex;
+				position: relative;
+			}
+			.pagination li a.page-link{
+				color: #fff;
+				background: transparent;
+				font-size: 21px;
+				line-height: 35px;
+				height: 38px;
+				width: 38px;
+				padding: 0;
+				margin: 0 8px;
+				border: none;
+				position: relative;
+				z-index: 1;
+				transition: all 0.4s ease 0s;
+			}
+			.pagination li.active a.page-link,
+			.pagination li a.page-link:hover,
+			.pagination li.active a.page-link:hover{
+				color: #fff;
+				background-color: transparent;
+			}
+			.pagination li a.page-link:before,
+			.pagination li a.page-link:after{
+				content:'';
+				background: linear-gradient(225deg,#f857a6,#ff5858);
+				height: 100%;
+				width: 100%;
+				border: 3px solid #fff;
+				box-shadow: 0 0 3px #000;
+				border-radius: 50%;
+				opacity: 1;
+				transform: translateX(-50%) translateY(-50%) rotate(-45deg);
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				z-index: -1;
+				transition: all 0.3s ease-in;
+			}
+			.pagination li a.page-link:hover:before,
+			.pagination li.active a.page-link:before{
+				border-radius: 50% 0 50% 50%;
+			}
+			.pagination li a.page-link:after{
+				background: #fff;
+				height: 5px;
+				width: 5px;
+				border: none;
+				box-shadow: 0 0 0 transparent;
+				opacity: 0;
+				transform: translateX(-50%) translateY(0) rotate(0);
+				top: auto;
+				bottom: 0;
+			}
+			.pagination li a.page-link:hover:after,
+			.pagination li.active a.page-link:after{
+				opacity: 1;
+				bottom: 85%;
+			}
+			.pagination li:first-child a.page-link:before{
+				transform: translateX(-50%) translateY(-50%) rotate(-135deg);
+			}
+			.pagination li:first-child a.page-link:hover:before{ border-radius: 50% 0 50% 50%; }
+			.pagination li:first-child a.page-link:after{
+				transform: translateX(0) translateY(-50%);
+				top: 50%;
+				bottom:auto;
+				left: auto;
+				right: 0;
+			 }
+			.pagination li:first-child a.page-link:hover:after{ right: 80%; }
+			.pagination li:last-child a.page-link:before{
+				transform: translateX(-50%) translateY(-50%) rotate(45deg);
+			}
+			.pagination li:last-child a.page-link:hover:before{ border-radius: 50% 0 50% 50%; }
+			.pagination li:last-child a.page-link:after{
+				transform: translateX(0) translateY(-50%);
+				bottom:auto;
+				top: 50%;
+				left: 0;
+			}
+			.pagination li:last-child a.page-link:hover:after{ left: 80%; }
+			@media only screen and (max-width: 480px){
+				.pagination{ display: block; }
+			 
+				.pagination li{
+					margin-bottom: 10px;
+					display: inline-block;
+				}
+			}
+
+#canvas {
+  position: fixed;
+  background:#ffb2b8;
+}
+
+.pt-page-moveToLeft {
+                -webkit-animation: moveToLeft .6s ease both;
+                -moz-animation: moveToLeft .6s ease both;
+                animation: moveToLeft .6s ease both;
+            }
+            @-webkit-keyframes moveToLeft {
+                from{-webkit-transform:translateX(-100%);}
+                to { -webkit-transform: translateX(0%); }
+            }
+            @-moz-keyframes moveToLeft {
+                from{-moz-transform:translateX(-100%);}
+                to { -moz-transform: translateX(0%); }
+            }
+            @-o-keyframs moveToLeft{
+                from{-o-transform:translateX(-100%);}
+                to(-o-transform:translateX(0%);}
+            }
+            @keyframes moveToLeft {
+                form{transform:translateX(-100%);}
+                to { transform: translateX(0%); }
+            }
+
+
+</style>
+</head>
+<body>
+<div class="pt-page-moveToLeft">
+<nav class="pagination-outer" aria-label="Page navigation">
+			<ul class="pagination">
+				<li class="page-item">
+					<a href="../3/3.html" class="page-link" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="page-item"><a class="page-link" href="./1.html">1</a></li>
+				<li class="page-item"><a class="page-link"  href="../2/2.html">2</a></li>
+				<li class="page-item"><a class="page-link" href="../3/3.html">3</a></li>
+				<li class="page-item active"><a class="page-link" href="4.html">4</a></li>
+				<li class="page-item"><a class="page-link" href="../5/5.html">5</a></li>
+				<li class="page-item">
+					<a href="../5/5.html" class="page-link" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.querySelector("#canvas");
+const context = canvas.getContext("2d", { alpha: false });
+
+let vw = canvas.width  = window.innerWidth;
+let vh = canvas.height = window.innerHeight;
+
+// let boxSize = Math.min(vw / 6, vh / 4);
+let boxSize = 80;
+
+const maxLevel = 10;
+const roundTo = 1000;
+
+const color1 = { h: 69,  s: 75, l: 51 };
+const color2 = { h: 288, s: 98, l: 17 };
+
+const colors = getColors(color1, color2, maxLevel + 2);
+
+const mouse = {
+  x: vw / 2,
+  y: vh / 2
+};
+
+let count = 0;
+let lean = 0;
+let scale = 0;
+let resized = false;
+let requestId = null;
+
+let x = (vw - boxSize) / 2;
+let y = vh;
+
+//
+// CALC BRANCHES
+// ================================================================================
+const calcBranches = (function() {
+  
+  let memo = {};
+  
+  let memoize = function(width, scale, lean) {
+        
+    const memoKey = `${width}-${scale}-${lean}`;
+    
+    if (!memo[memoKey]) {
+      
+      const currentH = width * scale;
+      
+      const result = {
+        leftSize:   Math.sqrt(currentH ** 2 + (width * (0.5 - lean)) ** 2),
+        rightSize:  Math.sqrt(currentH ** 2 + (width * (0.5 + lean)) ** 2),
+        leftAngle:  Math.atan(currentH / ((0.5 - lean) * width)),
+        rightAngle: Math.atan(currentH / ((0.5 + lean) * width))
+      };
+      
+      memo[memoKey] = result;      
+      
+      memoize.count++;
+    }     
+    return memo[memoKey];
+  }
+  
+  memoize.count = 0;  
+  memoize.cache = memo;
+  return memoize;  
+})();
+
+window.addEventListener("resize", onResize);
+window.addEventListener("mousemove", onMouseMove);
+update();
+
+//
+// DRAW TREE
+// ================================================================================
+function drawTree(size, scale, lean, level) {
+  
+  if (size < 1) {    
+    count += 2;
+    return;
+  }
+  
+  size = Math.round(size * roundTo) / roundTo;
+  
+  const { leftSize, leftAngle, rightSize, rightAngle } = calcBranches(size, scale, lean);
+  
+  context.save();      
+  context.fillRect(0, 0, size, -size);
+  
+  context.fillStyle = colors[level];
+  
+  context.translate(0, -size);  
+  context.rotate(-leftAngle);
+  
+  if (level) {    
+    drawTree(leftSize, scale, lean, level - 1);
+  } else {
+    context.fillRect(0, 0, leftSize, -leftSize);
+  }
+  
+  context.translate(leftSize, 0);
+  context.rotate(rightAngle + leftAngle);
+  
+  if (level) {
+    drawTree(rightSize, scale, lean, level - 1);
+  } else {
+    context.fillRect(0, 0, rightSize, -rightSize);    
+  }
+  
+  context.restore();  
+}
+
+//
+// UPDATE
+// ================================================================================
+function update() {
+    
+  if (resized) {
+    
+    vw = canvas.width  = window.innerWidth;
+    vh = canvas.height = window.innerHeight;
+    
+    // boxSize = Math.min(vw / 6, vh / 4);
+    
+    x = (vw - boxSize) / 2;
+    y = vh;
+  }
+    
+  scale = Math.round(map(mouse.y, vh, 0, 0, 0.8) * roundTo) / roundTo;
+  lean  = Math.round(map(mouse.x, 0, vw, 0.5, -0.5) * roundTo) / roundTo;
+    
+  context.fillStyle = "white";
+  context.fillRect(0, 0, vw, vh);
+    
+  context.save();
+  context.fillStyle = colors[maxLevel+1];
+  context.translate(x, y);
+  
+  drawTree(boxSize, scale, lean, maxLevel, maxLevel);  
+    
+  context.restore();
+  
+  resized = false;
+  requestId = null;
+}
+
+//
+// GET COLORS
+// ================================================================================
+function getColors(c1, c2, steps) {
+    
+  const colors = [];
+  
+  for (let i = 0; i < steps; i++) {
+    
+    const t = i / (steps - 1);
+        
+    const h = Math.round(lerp(c1.h, c2.h, t));
+    const s = Math.round(lerp(c1.s, c2.s, t));
+    const l = Math.round(lerp(c1.l, c2.l, t));
+    
+    colors.push(`hsl(${h},${s}%,${l}%)`);
+  }
+  
+  return colors;
+}
+
+//
+// ON MOUSE MOVE
+// ================================================================================
+function onMouseMove(event) {
+  
+  mouse.x = event.clientX;
+  mouse.y = event.clientY;
+  
+  if (!requestId) {
+    requestId = requestAnimationFrame(update);
+  }
+}
+
+//
+// ON RESIZE
+// ================================================================================
+function onResize() {
+  resized = true;
+  if (!requestId) {
+    requestId = requestAnimationFrame(update);
+  }
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+function map(x, a, b, c, d) {
+  return c + (d - c) * ((x - a) / (b - a)) || 0;
+}</script>
+</div>
+</body>
+</html>
